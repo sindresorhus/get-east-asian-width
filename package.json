@@ -1,6 +1,6 @@
 {
 	"name": "get-east-asian-width",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Determine the East Asian Width of a Unicode character",
 	"license": "MIT",
 	"repository": "sindresorhus/get-east-asian-width",
