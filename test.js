@@ -13,3 +13,12 @@ test('ambiguous', t => {
 	t.is(eastAsianWidth(fixture), 1);
 	t.is(eastAsianWidthType(fixture), 'ambiguous');
 });
+
+test('validate', t => {
+	t.throws(() => {
+		eastAsianWidth('invalid');
+	}, {instanceOf: TypeError});
+	t.throws(() => {
+		eastAsianWidthType('invalid');
+	}, {instanceOf: TypeError});
+});

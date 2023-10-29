@@ -6,53 +6,15 @@ function validate(codePoint) {
 	}
 }
 
-export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
-	validate(codePoint);
-
-	switch (lookup(codePoint)) {
-		case 'F':
-		case 'W': {
-			return 2;
-		}
-
-		case 'A': {
-			return ambiguousAsWide ? 2 : 1;
-		}
-
-		default: {
-			return 1;
-		}
-	}
-}
-
 export function eastAsianWidthType(codePoint) {
 	validate(codePoint);
 
-	switch (lookup(codePoint)) {
-		case 'A': {
-			return 'ambiguous';
-		}
+	return lookup(codePoint);
+}
 
-		case 'F': {
-			return 'fullwidth';
-		}
-
-		case 'H': {
-			return 'halfwidth';
-		}
-
-		case 'N': {
-			return 'neutral';
-		}
-
-		case 'Na': {
-			return 'narrow';
-		}
-
-		case 'W': {
-			return 'wide';
-		}
-
-		// No default
-	}
+export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
+	const type = eastAsianWidthType(codePoint);
+	return type === 'fullwidth' || type === 'wide' || (type === 'ambiguous' && ambiguousAsWide)
+		? 2
+		: 1;
 }
