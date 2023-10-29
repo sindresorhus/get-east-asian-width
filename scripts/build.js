@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
 import simplifyRanges from 'simplify-ranges';
 import {outdent} from 'outdent';
 import indentString from 'indent-string';
@@ -40,7 +41,9 @@ function parse(input) {
 	}
 
 	for (const [category, ranges] of categories) {
-		categories.set(category, simplifyRanges(ranges, {separateTwoNumberRanges: true}));
+		const simplified = simplifyRanges(ranges, {separateTwoNumberRanges: true});
+		assert.ok(simplified.length !== 0);
+		categories.set(category, simplified);
 	}
 
 	return categories;
@@ -50,7 +53,7 @@ function generateLookupFunction(categories) {
 	const branches = [];
 
 	for (const [category, ranges] of categories) {
-		if (category === DEFAULT_CATEGORY || ranges.length === 0) {
+		if (category === DEFAULT_CATEGORY) {
 			continue;
 		}
 
