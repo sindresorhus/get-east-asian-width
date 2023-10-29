@@ -3,7 +3,7 @@
 export default function lookup(x) {
 
 	if (
-		x >= 0x0 && x <= 0x1f
+		x >= 0 && x <= 0x1f
 		|| x >= 0x7f && x <= 0xa0
 		|| x === 0xa9
 		|| x === 0xab
@@ -940,7 +940,7 @@ export default function lookup(x) {
 		|| x === 0xe0001
 		|| x >= 0xe0020 && x <= 0xe007f
 	) {
-		return 'N';
+		return 'neutral';
 	}
 
 	if (
@@ -955,7 +955,7 @@ export default function lookup(x) {
 		|| x === 0x2985
 		|| x === 0x2986
 	) {
-		return 'Na';
+		return 'narrow';
 	}
 
 	if (
@@ -1175,7 +1175,7 @@ export default function lookup(x) {
 		|| x >= 0xf0000 && x <= 0xffffd
 		|| x >= 0x100000 && x <= 0x10fffd
 	) {
-		return 'A';
+		return 'ambiguous';
 	}
 
 	if (
@@ -1314,7 +1314,7 @@ export default function lookup(x) {
 		|| x >= 0x20000 && x <= 0x2fffd
 		|| x >= 0x30000 && x <= 0x3fffd
 	) {
-		return 'W';
+		return 'wide';
 	}
 
 	if (
@@ -1326,7 +1326,7 @@ export default function lookup(x) {
 		|| x >= 0xffda && x <= 0xffdc
 		|| x >= 0xffe8 && x <= 0xffee
 	) {
-		return 'H';
+		return 'halfwidth';
 	}
 
 	if (
@@ -1334,8 +1334,8 @@ export default function lookup(x) {
 		|| x >= 0xff01 && x <= 0xff60
 		|| x >= 0xffe0 && x <= 0xffe6
 	) {
-		return 'F';
+		return 'fullwidth';
 	}
 
-	return 'N';
+	return 'neutral';
 }
