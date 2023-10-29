@@ -24,7 +24,7 @@ function parse(input) {
 	const categories = new Map(Array.from(CATEGORY_NAMES, ([, category]) => [category, []]));
 
 	// Parse input and group by category
-	for (let line of input.split('\n')) {
+	for (const line of input.split('\n')) {
 		/*
 		https://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt
 
@@ -41,7 +41,7 @@ function parse(input) {
 
 	for (const [category, ranges] of categories) {
 		const simplified = simplifyRanges(ranges, {separateTwoNumberRanges: true});
-		assert.ok(simplified.length !== 0);
+		assert.ok(simplified.length > 0);
 		categories.set(category, simplified);
 	}
 
