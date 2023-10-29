@@ -18,7 +18,8 @@ export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
 	if (
 		isFullWidth(codePoint)
 		|| isWide(codePoint)
-		|| (ambiguousAsWide && isAmbiguous(codePoint))) {
+		|| (ambiguousAsWide && isAmbiguous(codePoint))
+	) {
 		return 2;
 	}
 
