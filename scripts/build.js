@@ -19,13 +19,13 @@ const indent = string => indentString(string, 1, {indent: '\t'});
 
 function parse(input) {
 	// Remove comments
-	input = input.trim().replaceAll(/#.*$/gm, '').trim();
+	input = input.trim().replaceAll(/#.*$/g, '').trim();
 
 	const lines = input.split('\n');
 	const categories = new Map(Array.from(CATEGORY_NAMES, ([, category]) => [category, []]));
 
 	// Parse input and group by category
-	for (let line of input.split('\n')) {
+	for (let line of lines) {
 		/*
 		https://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt
 
