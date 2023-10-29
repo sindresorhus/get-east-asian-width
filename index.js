@@ -1,4 +1,4 @@
-import lookup from './lookup.js';
+import {getCategory, isAmbiguous, isFullWidth, isWide} from './lookup.js';
 
 function validate(codePoint) {
 	if (!Number.isSafeInteger(codePoint)) {
@@ -9,12 +9,23 @@ function validate(codePoint) {
 export function eastAsianWidthType(codePoint) {
 	validate(codePoint);
 
-	return lookup(codePoint);
+	return getCategory(codePoint);
 }
 
 export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
-	const type = eastAsianWidthType(codePoint);
-	return type === 'fullwidth' || type === 'wide' || (type === 'ambiguous' && ambiguousAsWide)
-		? 2
-		: 1;
+	validate(codePoint);
+
+	if (
+		isFullWidth(codePoint)
+		|| isWide(codePoint)
+		|| (ambiguousAsWide && isAmbiguous(codePoint))
+	) {
+		return 2;
+	}
+
+	return 1;
 }
+
+// For Prettier. This doesn't count "ambiguous" characters or check for valid input.
+// https://github.com/sindresorhus/get-east-asian-width/pull/6
+export const _isNarrowWidth = codePoint => !(isFullWidth(codePoint) || isWide(codePoint));
