@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import simplifyRanges from 'simplify-ranges';
 
-const types = {
+const CATEGORIES = {
 	A: 'ambiguous',
 	F: 'fullwidth',
 	H: 'halfwidth',
@@ -10,6 +10,7 @@ const types = {
 	Na: 'narrow',
 	W: 'wide',
 };
+const DEFAULT_CATEGORY = CATEGORIES.N;
 
 const toHexadecimal = number => number === 0 ? '0' : `0x${number.toString(16).toUpperCase()}`;
 
@@ -24,8 +25,8 @@ function parse(input) {
 	for (const line of lines) {
 		const [codePoint, rest] = line.split(';').map(x => x.trim());
 		const type = rest.split(' ')[0];
-		assert.ok(Object.hasOwn(types, type));
-		const category = types[type];
+		assert.ok(Object.hasOwn(CATEGORIES, type));
+		const category = CATEGORIES[type];
 		const [start, end = start] = codePoint.split('..').map(part => Number.parseInt(part, 16));
 		if (!categories.has(category)) {
 			categories.set(category, []);
@@ -45,6 +46,10 @@ function generateLookupFunction(categories) {
 	let code = '// Generated code.\n\nexport default function lookup(x) {\n';
 
 	for (const [category, ranges] of categories) {
+		if (category === DEFAULT_CATEGORY) {
+			continue;
+		}
+
 		const conditions = ranges.map(([start, end]) =>
 			start === end
 				? `x === ${toHexadecimal(start)}`
@@ -54,7 +59,7 @@ function generateLookupFunction(categories) {
 		code += `\n\tif (\n\t\t${conditions.join('\n\t\t|| ')}\n\t) {\n\t\treturn '${category}';\n\t}\n`;
 	}
 
-	code += '\n\treturn \'neutral\';\n';
+	code += `\n\treturn '${DEFAULT_CATEGORY}';\n`;
 	code += '}\n';
 
 	return code;
