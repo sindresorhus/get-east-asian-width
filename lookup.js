@@ -1,8 +1,7 @@
 // Generated code.
 
-export default function lookup(x) {
-	if (
-		x === 0xA1
+function isAmbiguous() {
+	return x === 0xA1
 		|| x === 0xA4
 		|| x === 0xA7
 		|| x === 0xA8
@@ -216,48 +215,17 @@ export default function lookup(x) {
 		|| x >= 0x1F19B && x <= 0x1F1AC
 		|| x >= 0xE0100 && x <= 0xE01EF
 		|| x >= 0xF0000 && x <= 0xFFFFD
-		|| x >= 0x100000 && x <= 0x10FFFD
-	) {
-		return 'ambiguous';
-	}
+		|| x >= 0x100000 && x <= 0x10FFFD;
+}
 
-	if (
-		x === 0x3000
+function isFullWidth() {
+	return x === 0x3000
 		|| x >= 0xFF01 && x <= 0xFF60
-		|| x >= 0xFFE0 && x <= 0xFFE6
-	) {
-		return 'fullwidth';
-	}
+		|| x >= 0xFFE0 && x <= 0xFFE6;
+}
 
-	if (
-		x === 0x20A9
-		|| x >= 0xFF61 && x <= 0xFFBE
-		|| x >= 0xFFC2 && x <= 0xFFC7
-		|| x >= 0xFFCA && x <= 0xFFCF
-		|| x >= 0xFFD2 && x <= 0xFFD7
-		|| x >= 0xFFDA && x <= 0xFFDC
-		|| x >= 0xFFE8 && x <= 0xFFEE
-	) {
-		return 'halfwidth';
-	}
-
-	if (
-		x >= 0x20 && x <= 0x7E
-		|| x === 0xA2
-		|| x === 0xA3
-		|| x === 0xA5
-		|| x === 0xA6
-		|| x === 0xAC
-		|| x === 0xAF
-		|| x >= 0x27E6 && x <= 0x27ED
-		|| x === 0x2985
-		|| x === 0x2986
-	) {
-		return 'narrow';
-	}
-
-	if (
-		x >= 0x1100 && x <= 0x115F
+function isWide() {
+	return x >= 0x1100 && x <= 0x115F
 		|| x === 0x231A
 		|| x === 0x231B
 		|| x === 0x2329
@@ -390,10 +358,44 @@ export default function lookup(x) {
 		|| x >= 0x1FAE0 && x <= 0x1FAE8
 		|| x >= 0x1FAF0 && x <= 0x1FAF8
 		|| x >= 0x20000 && x <= 0x2FFFD
-		|| x >= 0x30000 && x <= 0x3FFFD
+		|| x >= 0x30000 && x <= 0x3FFFD;
+}
+
+function getCategory(x) {
+	if (isAmbiguous(x)) return 'ambiguous';
+
+	if (isFullWidth(x)) return 'fullwidth';
+
+	if (
+		x === 0x20A9
+		|| x >= 0xFF61 && x <= 0xFFBE
+		|| x >= 0xFFC2 && x <= 0xFFC7
+		|| x >= 0xFFCA && x <= 0xFFCF
+		|| x >= 0xFFD2 && x <= 0xFFD7
+		|| x >= 0xFFDA && x <= 0xFFDC
+		|| x >= 0xFFE8 && x <= 0xFFEE
 	) {
-		return 'wide';
+		return 'halfwidth';
 	}
+
+	if (
+		x >= 0x20 && x <= 0x7E
+		|| x === 0xA2
+		|| x === 0xA3
+		|| x === 0xA5
+		|| x === 0xA6
+		|| x === 0xAC
+		|| x === 0xAF
+		|| x >= 0x27E6 && x <= 0x27ED
+		|| x === 0x2985
+		|| x === 0x2986
+	) {
+		return 'narrow';
+	}
+
+	if (isWide(x)) return 'wide';
 
 	return 'neutral';
 }
+
+export {isAmbiguous, isFullWidth, isWide, getCategory};

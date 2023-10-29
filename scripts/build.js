@@ -13,6 +13,11 @@ const CATEGORY_NAMES = new Map([
 	['W', 'wide'],
 ]);
 const DEFAULT_CATEGORY = CATEGORY_NAMES.get('N');
+const independentFunctions = {
+	ambiguous: 'isAmbiguous',
+	fullwidth: 'isFullWidth',
+	wide: 'isWide',
+};
 
 const toHexadecimal = number => number === 0 ? '0' : `0x${number.toString(16).toUpperCase()}`;
 const indent = string => indentString(string, 1, {indent: '\t'});
@@ -48,7 +53,9 @@ function parse(input) {
 	return categories;
 }
 
-function generateLookupFunction(categories) {
+function generateFunctions(categories) {
+	const functions = {};
+
 	const branches = [];
 
 	for (const [category, ranges] of categories) {
@@ -62,35 +69,49 @@ function generateLookupFunction(categories) {
 				: `x >= ${toHexadecimal(start)} && x <= ${toHexadecimal(end)}`,
 		);
 
-		branches.push(outdent`
-			if (
-				${conditions.join('\n\t|| ')}
-			) {
-				return '${category}';
-			}
-		`);
+		const functionName = independentFunctions[category];
+		if (functionName) {
+			functions[functionName] = outdent`
+				function ${functionName}(x) {
+					return ${conditions.join('\n\t\t|| ')};
+				}
+			`;
+			branches.push(`if (${functionName}(x)) return '${category}';`);
+		} else {
+			branches.push(outdent`
+				if (
+					${conditions.join('\n\t|| ')}
+				) {
+					return '${category}';
+				}
+			`);
+		}
 	}
 
-	return outdent`
-		function lookup(x) {
+	functions.getCategory = outdent`
+		function getCategory(x) {
 			${indent(branches.join('\n\n')).trimStart()}
 
 			return '${DEFAULT_CATEGORY}';
 		}
 	`;
+
+	return functions;
 }
 
 const response = await fetch('https://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt');
 const text = await response.text();
 const parsed = parse(text);
-const lookupFunction = generateLookupFunction(parsed);
+const functions = generateFunctions(parsed);
 
 fs.writeFileSync(
 	'lookup.js',
 	outdent`
 		// Generated code.
 
-		export default ${lookupFunction}
+		${Object.values(functions).map(code => code).join('\n\n')}
+
+		export {${Object.keys(functions).join(', ')}};
 	` + '\n',
 );
 
