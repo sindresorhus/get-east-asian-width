@@ -11,7 +11,7 @@ const types = {
 	W: 'wide',
 };
 
-const toHexadecimal = number => number === 0 ? '0' : `0x${number.toString(16).toUpperCase()}`;
+const toHexadecimal = number => number === 0 ? '0' : `0x${number.toString(16)}`;
 
 function parse(input) {
 	// Remove comments
