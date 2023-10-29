@@ -1,6 +1,6 @@
 // Generated code.
 
-function isAmbiguous() {
+function isAmbiguous(x) {
 	return x === 0xA1
 		|| x === 0xA4
 		|| x === 0xA7
@@ -218,13 +218,13 @@ function isAmbiguous() {
 		|| x >= 0x100000 && x <= 0x10FFFD;
 }
 
-function isFullWidth() {
+function isFullWidth(x) {
 	return x === 0x3000
 		|| x >= 0xFF01 && x <= 0xFF60
 		|| x >= 0xFFE0 && x <= 0xFFE6;
 }
 
-function isWide() {
+function isWide(x) {
 	return x >= 0x1100 && x <= 0x115F
 		|| x === 0x231A
 		|| x === 0x231B
