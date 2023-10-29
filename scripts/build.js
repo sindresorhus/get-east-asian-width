@@ -19,7 +19,7 @@ const indent = string => indentString(string, 1, {indent: '\t'});
 
 function parse(input) {
 	// Remove comments
-	input = input.trim().replaceAll(/#.*$/g, '').trim();
+	input = input.replaceAll(/#.*$/gm, '').trim();
 
 	const lines = input.split('\n');
 	const categories = new Map(Array.from(CATEGORY_NAMES, ([, category]) => [category, []]));
