@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import simplifyRanges from 'simplify-ranges';
 import {outdent} from 'outdent';
@@ -104,7 +104,7 @@ const text = await response.text();
 const parsed = parse(text);
 const functions = generateFunctions(parsed);
 
-await fs.writeFile(
+fs.writeFileSync(
 	new URL('../lookup.js', import.meta.url),
 	outdent`
 		// Generated code.
@@ -115,4 +115,4 @@ await fs.writeFile(
 	` + '\n',
 );
 
-await fs.writeFile(new URL('EastAsianWidth.txt', import.meta.url), text);
+fs.writeFileSync(new URL('EastAsianWidth.txt', import.meta.url), text);
