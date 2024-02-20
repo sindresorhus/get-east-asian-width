@@ -8,6 +8,7 @@ on:
 
 jobs:
   update:
+    if: github.event_name != 'schedule' || github.repository == 'sindresorhus/get-east-asian-width'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
