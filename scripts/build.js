@@ -105,7 +105,7 @@ const parsed = parse(text);
 const functions = generateFunctions(parsed);
 
 fs.writeFileSync(
-	'lookup.js',
+	new URL('../lookup.js', import.meta.url),
 	outdent`
 		// Generated code.
 
@@ -115,4 +115,4 @@ fs.writeFileSync(
 	` + '\n',
 );
 
-fs.writeFileSync('scripts/EastAsianWidth.txt', text);
+fs.writeFileSync(new URL('EastAsianWidth.txt', import.meta.url), text);
