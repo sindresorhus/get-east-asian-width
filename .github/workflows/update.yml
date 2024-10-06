@@ -6,14 +6,13 @@ on:
     # “At 00:00 on Sunday.” https://crontab.guru/#0_0_*_*_0
     - cron: "0 0 * * 0"
 
-permissions:
-  pull-requests: write
-  contents: write
-
 jobs:
   update:
     if: github.event_name != 'schedule' || github.repository == 'sindresorhus/get-east-asian-width'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
