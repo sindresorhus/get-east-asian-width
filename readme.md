@@ -26,6 +26,9 @@ console.log(eastAsianWidthType(codePoint));
 //=> 'wide'
 ```
 
+> [!NOTE]
+> This package is ESM-only. Node.js 20.19, 22.12, 23, or later is necessary to `require` this package.
+
 ## `eastAsianWidth(codePoint: number, options?: object): 1 | 2`
 
 Returns the width as a number for the given code point.
