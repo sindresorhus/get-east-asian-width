@@ -23,6 +23,8 @@ const toHexadecimal = number => number === 0 ? '0' : `0x${number.toString(16).to
 const indent = string => indentString(string, 1, {indent: '\t'});
 
 function parse(input) {
+	const {version} = input.match(/EastAsianWidth-(?<version>.*)\.txt/).groups;
+
 	// Remove comments
 	input = input.replaceAll(/\s*#.*$/gm, '').trim();
 
@@ -50,7 +52,11 @@ function parse(input) {
 		categories.set(category, simplified);
 	}
 
-	return categories;
+
+	return {
+		version,
+		categories,
+	};
 }
 
 function generateFunctions(categories) {
@@ -101,8 +107,11 @@ function generateFunctions(categories) {
 
 const response = await fetch('https://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt');
 const text = await response.text();
-const parsed = parse(text);
-const functions = generateFunctions(parsed);
+const {
+	version,
+	categories,
+} = parse(text);
+const functions = generateFunctions(categories);
 
 fs.writeFileSync(
 	new URL('../lookup.js', import.meta.url),
@@ -116,3 +125,12 @@ fs.writeFileSync(
 );
 
 fs.writeFileSync(new URL('EastAsianWidth.txt', import.meta.url), text);
+
+if (process.argv.includes('--print-version')) {
+	let versionNumber = version;
+	while (versionNumber.endsWith('.0')) {
+		versionNumber = versionNumber.slice(0, -2)
+	}
+
+	console.log(versionNumber)
+}
