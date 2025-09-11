@@ -16,11 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: npm install
-      - run: npm run build
+      - run: |
+          npm install
+          npm run build -- --save-version-file
+          echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+          echo "UNICODE_VERSION=$(cat UNICODE_VERSION)" >> "$GITHUB_ENV"
+          rm UNICODE_VERSION
       - uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: Update
-          branch: automated-update
+          commit-message: Update to Unicode ${{env.UNICODE_VERSION }}
+          title: Update to Unicode ${{env.UNICODE_VERSION }}
+          branch: automated-update-${{ env.CURRENT_DATE }}
           branch-suffix: timestamp
-          title: Update
