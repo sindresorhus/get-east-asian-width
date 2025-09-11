@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
+import process from 'node:process';
 import simplifyRanges from 'simplify-ranges';
 import {outdent} from 'outdent';
 import indentString from 'indent-string';
@@ -51,7 +52,6 @@ function parse(input) {
 		assert.ok(simplified.length > 0);
 		categories.set(category, simplified);
 	}
-
 
 	return {
 		version,
