@@ -126,11 +126,12 @@ fs.writeFileSync(
 
 fs.writeFileSync(new URL('EastAsianWidth.txt', import.meta.url), text);
 
-if (process.argv.includes('--print-version')) {
+if (process.argv.includes('--save-version-file')) {
 	let versionNumber = version;
 	while (versionNumber.endsWith('.0')) {
-		versionNumber = versionNumber.slice(0, -2)
+		versionNumber = versionNumber.slice(0, -2);
 	}
 
-	console.log(versionNumber)
+	// Save version number to `UNICODE_VERSION` on CI
+	fs.writeFileSync(new URL('../UNICODE_VERSION', import.meta.url), versionNumber);
 }
