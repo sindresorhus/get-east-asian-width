@@ -19,7 +19,9 @@ jobs:
       - run: npm install
       - run: |
           echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
-          echo "UNICODE_VERSION=$(npm run build --print-version)" >> "$GITHUB_ENV"
+          npm run build --print-version > VERSION
+          echo "UNICODE_VERSION=$(cat VERSION)" >> "$GITHUB_ENV"
+          rm VERSION
       - uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Update to Unicode ${{env.UNICODE_VERSION }}
