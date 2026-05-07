@@ -63,6 +63,9 @@ const {
 	categories,
 } = parse(text);
 
+// A generated CodePointTrie variant with block shift 8 benchmarks as the fastest strategy.
+// However, serializing that trie inflates raw `lookup.js` size by about 10x, so this generator
+// keeps packed ranges as the default and leaves lookup logic in `lookup.js`.
 fs.writeFileSync(
 	new URL('../lookup-data.js', import.meta.url),
 	outdent`
