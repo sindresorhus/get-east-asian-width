@@ -1,4 +1,4 @@
-import {getCategory, isAmbiguous, isFullWidth, isWide} from './lookup.js';
+import {getCategory, isAmbiguous, isFullwidth, isWide} from './lookup.js';
 
 function validate(codePoint) {
 	if (!Number.isSafeInteger(codePoint)) {
@@ -16,7 +16,7 @@ export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
 	validate(codePoint);
 
 	if (
-		isFullWidth(codePoint)
+		isFullwidth(codePoint)
 		|| isWide(codePoint)
 		|| (ambiguousAsWide && isAmbiguous(codePoint))
 	) {
@@ -27,4 +27,9 @@ export function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {
 }
 
 // Private exports for https://github.com/sindresorhus/is-fullwidth-code-point
-export {isFullWidth as _isFullWidth, isWide as _isWide} from './lookup.js';
+export {
+	isFullwidth as _isFullwidth,
+	// TODO: Remove this in the next major version.
+	isFullwidth as _isFullWidth,
+	isWide as _isWide,
+} from './lookup.js';
