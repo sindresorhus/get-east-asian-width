@@ -62,7 +62,7 @@ export const isAmbiguous = codePoint => {
 	return isInRange(ambiguousRanges, codePoint);
 };
 
-export const isFullWidth = codePoint => {
+export const isFullwidth = codePoint => {
 	if (
 		codePoint < fullwidthMinimalCodePoint
 		|| codePoint > fullwidthMaximumCodePoint
@@ -73,7 +73,7 @@ export const isFullWidth = codePoint => {
 	return isInRange(fullwidthRanges, codePoint);
 };
 
-const isHalfWidth = codePoint => {
+const isHalfwidth = codePoint => {
 	if (
 		codePoint < halfwidthMinimalCodePoint
 		|| codePoint > halfwidthMaximumCodePoint
@@ -118,11 +118,11 @@ export function getCategory(codePoint) {
 		return 'ambiguous';
 	}
 
-	if (isFullWidth(codePoint)) {
+	if (isFullwidth(codePoint)) {
 		return 'fullwidth';
 	}
 
-	if (isHalfWidth(codePoint)) {
+	if (isHalfwidth(codePoint)) {
 		return 'halfwidth';
 	}
 
