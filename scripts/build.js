@@ -45,7 +45,13 @@ function parse(input) {
 }
 
 const response = await fetch('https://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt');
+if (!response.ok) {
+	throw new Error(`Failed to fetch EastAsianWidth.txt: ${response.status} ${response.statusText}`);
+}
+
 const text = await response.text();
+assert.ok(/^# EastAsianWidth-\d+\.\d+\.\d+\.txt/.test(text), 'Fetched content does not match the expected EastAsianWidth.txt format.');
+
 const {
 	version,
 	categories,
